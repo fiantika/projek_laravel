@@ -12,8 +12,9 @@ use Illuminate\Support\Facades\Log;
  *
  * This class unifies the login and logout functionality for all roles.
  * After a successful login, users are redirected based on their role:
- * - `operator`: directed to the cashier transaction list.
- * - `keuangan`: directed to the admin dashboard.
+ * - `admin`: directed to the admin dashboard.
+ * - `operator`: directed to the operator dashboard.
+ * - `keuangan`: directed to the financial (kasir) dashboard.
  */
 class AuthController extends Controller
 {
@@ -34,14 +35,17 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             Log::info('User logged in:', ['email' => $user->email, 'role' => $user->role]);
-            // Redirect based on role. Administrators are sent to the
-            // admin dashboard, while operators and financial (keuangan)
-            // users are directed to the cashier transaction list. Any
-            // other roles will fall back to the cashier area as well.
-            if ($user->role === 'admin') {
-                return redirect('/admin/dashboard');
-            }
-            return redirect('/kasir/transaksi');
+        // Redirect based on role. The "admin" role has been merged into the
+        // operator role. Operators are sent to their dashboard and
+        // financial (keuangan) users are sent to the kasir dashboard.
+        if ($user->role === 'operator') {
+            return redirect('/operator/dashboard');
+        }
+        if ($user->role === 'keuangan') {
+            return redirect('/kasir/dashboard');
+        }
+        // Default fallback for unexpected roles
+        return redirect('/login');
         }
         Log::warning('Login failed for email:', ['email' => $request->email]);
         return redirect()->back()->withErrors([

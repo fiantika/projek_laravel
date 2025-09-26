@@ -7,10 +7,10 @@
                       <h4><b>Tambah Data</b></h4>
                       
                       @isset($user)
-                        <form action="/admin/user/{{ $user->id }}" method="POST">
+                        <form action="/operator/user/{{ $user->id }}" method="POST">
                         @method('PUT')
                         @else
-                        <form action="/admin/user" method="POST">
+                        <form action="/operator/user" method="POST">
                      @endisset
 
                         @csrf
@@ -75,7 +75,7 @@
                         @enderror
                     </div>
 
-                    <a href="/admin/user" class="btn btn-secondary"><i class="fas fa-arrow-left"></i>Kembali</a>
+                    <a href="/operator/user" class="btn btn-secondary"><i class="fas fa-arrow-left"></i>Kembali</a>
                     <button type="submit" class="btn btn-primary">Simpan</button>
                     </form>
                 </div>

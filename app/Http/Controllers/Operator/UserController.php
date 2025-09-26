@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Operator;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -9,10 +9,12 @@ use Illuminate\Support\Facades\Hash;
 use RealRashid\SweetAlert\Facades\Alert;
 
 /**
- * Controller for managing application users.
+ * Controller for managing users under the operator namespace.
  *
- * This controller centralizes all CRUD operations for the User model.
- * Routes exclude the `show` action, since users are displayed via the index table.
+ * Operators have permission to manage users much like administrators,
+ * however the route prefixes and view paths differ. All methods
+ * mirror the behaviour of the Admin\UserController but operate on
+ * `/operator/*` URLs and load views from the `operator` directory.
  */
 class UserController extends Controller
 {
@@ -23,10 +25,10 @@ class UserController extends Controller
     {
         $data = [
             'title' => 'Manajemen User',
-            'user' => User::all(),
-            'content' => 'admin/user/index',
+            'user'  => User::all(),
+            'content' => 'operator/user/index',
         ];
-        return view('admin.layouts.wrapper', $data);
+        return view('operator.layouts.wrapper', $data);
     }
 
     /**
@@ -36,9 +38,9 @@ class UserController extends Controller
     {
         $data = [
             'title' => 'Tambah User',
-            'content' => 'admin/user/create',
+            'content' => 'operator/user/create',
         ];
-        return view('admin.layouts.wrapper', $data);
+        return view('operator.layouts.wrapper', $data);
     }
 
     /**
@@ -58,7 +60,7 @@ class UserController extends Controller
         unset($data['re_password']);
         User::create($data);
         Alert::success('Sukses', 'User berhasil ditambahkan');
-        return redirect('/admin/user')->with('success', 'User berhasil ditambahkan.');
+        return redirect('/operator/user')->with('success', 'User berhasil ditambahkan.');
     }
 
     /**
@@ -69,9 +71,9 @@ class UserController extends Controller
         $data = [
             'user' => User::findOrFail($id),
             'title' => 'Edit User',
-            'content' => 'admin/user/create',
+            'content' => 'operator/user/create',
         ];
-        return view('admin.layouts.wrapper', $data);
+        return view('operator.layouts.wrapper', $data);
     }
 
     /**
@@ -96,7 +98,7 @@ class UserController extends Controller
         unset($data['re_password']);
         $user->update($data);
         Alert::success('Sukses', 'User berhasil diperbarui');
-        return redirect('/admin/user')->with('success', 'User berhasil diperbarui.');
+        return redirect('/operator/user')->with('success', 'User berhasil diperbarui.');
     }
 
     /**
@@ -107,6 +109,6 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
         Alert::success('Sukses', 'User berhasil dihapus');
-        return redirect('/admin/user')->with('success', 'User berhasil dihapus.');
+        return redirect('/operator/user')->with('success', 'User berhasil dihapus.');
     }
 }
