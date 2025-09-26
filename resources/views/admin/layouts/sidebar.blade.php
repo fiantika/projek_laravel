@@ -71,55 +71,34 @@
 </ul> --}}
 
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
-          
+          <!-- Dashboard menu is always available -->
           <li class="nav-item">
-            <a href="/admin/dashboard" class="nav-link {{ Request::is('/') ? 'active' : '' }}">
+            <a href="/admin/dashboard" class="nav-link {{ Request::is('admin/dashboard') ? 'active' : '' }}">
               <i class="nav-icon fas fa-th"></i>
-              <p>
-                Dashboard
-              </p>
+              <p>Dashboard</p>
             </a>
           </li>
-          
-           <li class="nav-item">
-            <a href="/admin/transaksi" class="nav-link  {{ Request::is('admin/transaksi*') ? 'active' : '' }}">
-              <i class="nav-icon fas fa-exchange-alt"></i>
-              <p>
-                Transaksi
-              </p>
-            </a>
-          </li>
-
-
-           <li class="nav-item">
-            <a href="/admin/produk" class="nav-link  {{ Request::is('admin/produk*') ? 'active' : '' }}">
+          @if(auth()->check() && auth()->user()->role == 'admin')
+          <!-- Only administrators can manage produk, kategori and user. Admin does not handle transactions here. -->
+          <li class="nav-item">
+            <a href="/admin/produk" class="nav-link {{ Request::is('admin/produk*') ? 'active' : '' }}">
               <i class="nav-icon fas fa-table"></i>
-              <p>
-                Produk
-              </p>
+              <p>Produk</p>
             </a>
           </li>
-
-            <li class="nav-item">
-            <a href="/admin/kategori" class="nav-link  {{ Request::is('admin/kategori*') ? 'active' : '' }}">
+          <li class="nav-item">
+            <a href="/admin/kategori" class="nav-link {{ Request::is('admin/kategori*') ? 'active' : '' }}">
               <i class="nav-icon fas fa-list"></i>
-              <p>
-                Kategori
-              </p>
+              <p>Kategori</p>
             </a>
           </li>
-
           <li class="nav-item">
             <a href="/admin/user" class="nav-link {{ Request::is('admin/user*') ? 'active' : '' }}">
               <i class="nav-icon fas fa-users"></i>
-              <p>
-                User
-              </p>
+              <p>User</p>
             </a>
           </li>
-
+          @endif
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

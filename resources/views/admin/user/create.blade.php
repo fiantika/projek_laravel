@@ -60,6 +60,21 @@
                         @enderror
                     </div>
 
+                   <div class="form-group">
+                        <label for=""><b>Role</b></label>
+                        <select name="role" class="form-control @error('role') is-invalid @enderror">
+                            <option value="">-- Pilih Role --</option>
+                            <option value="admin" {{ (isset($user) && $user->role == 'admin') ? 'selected' : '' }}>Admin</option>
+                            <option value="keuangan" {{ (isset($user) && $user->role == 'keuangan') ? 'selected' : '' }}>Keuangan (Kasir)</option>
+                            <option value="operator" {{ (isset($user) && $user->role == 'operator') ? 'selected' : '' }}>Operator (Kasir)</option>
+                        </select>
+                        @error('role')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </div>
+
                     <a href="/admin/user" class="btn btn-secondary"><i class="fas fa-arrow-left"></i>Kembali</a>
                     <button type="submit" class="btn btn-primary">Simpan</button>
                     </form>

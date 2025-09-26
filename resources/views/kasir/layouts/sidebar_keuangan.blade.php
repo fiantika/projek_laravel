@@ -16,48 +16,15 @@
                with font-awesome or any other icon font library -->
           
           <li class="nav-item">
-            <a href="/post" class="nav-link {{ Request::is('/') ? 'active' : '' }}">
+            <a href="/kasir/dashboard" class="nav-link {{ Request::is('kasir/dashboard') ? 'active' : '' }}">
               <i class="nav-icon fas fa-th"></i>
-              <p>
-                Dashboard ksr
-              </p>
+              <p>Dashboard</p>
             </a>
           </li>
-          
-           <li class="nav-item">
-            <a href="/admin/transaksi" class="nav-link  {{ Request::is('admin/transaksi*') ? 'active' : '' }}">
-              <i class="nav-icon fas fa-exchange-alt"></i>
-              <p>
-                Transaksi
-              </p>
-            </a>
-          </li>
-
-
-           <li class="nav-item">
-            <a href="/admin/produk" class="nav-link  {{ Request::is('admin/produk*') ? 'active' : '' }}">
-              <i class="nav-icon fas fa-table"></i>
-              <p>
-                Produk
-              </p>
-            </a>
-          </li>
-
-            <li class="nav-item">
-            <a href="/admin/kategori" class="nav-link  {{ Request::is('admin/kategori*') ? 'active' : '' }}">
-              <i class="nav-icon fas fa-list"></i>
-              <p>
-                Kategori
-              </p>
-            </a>
-          </li>
-
           <li class="nav-item">
-            <a href="/admin/user" class="nav-link {{ Request::is('admin/user*') ? 'active' : '' }}">
-              <i class="nav-icon fas fa-users"></i>
-              <p>
-                User
-              </p>
+            <a href="/kasir/transaksi" class="nav-link {{ Request::is('kasir/transaksi*') ? 'active' : '' }}">
+              <i class="nav-icon fas fa-exchange-alt"></i>
+              <p>Transaksi</p>
             </a>
           </li>
 

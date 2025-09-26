@@ -14,12 +14,18 @@ class CekRole
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
    // app/Http/Middleware/CekRole.php
-    public function handle($request, Closure $next, $role)
+    public function handle($request, Closure $next, ...$roles)
     {
-        if (auth()->check() && auth()->user()->role == $role) {
+        /**
+         * This middleware now supports checking against multiple roles. The list
+         * of roles is passed as variadic parameters from the route definition
+         * (e.g. `role:operator,keuangan`). If the authenticated user's role
+         * matches any of the supplied roles, the request is allowed to
+         * proceed. Otherwise an HTTP 403 response is returned.
+         */
+        if (auth()->check() && in_array(auth()->user()->role, $roles)) {
             return $next($request);
         }
-
         abort(403, 'Unauthorized');
     }
 

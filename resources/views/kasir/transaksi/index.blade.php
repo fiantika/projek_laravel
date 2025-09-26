@@ -5,7 +5,7 @@
             <div class="card-body">
                 <h5><b>{{ $title }}</b></h5>
 
-                <a href="/admin/transaksi/create" class="btn btn-primary mb-2"><i class="fas fa-plus"></i>Tambah</a>
+                <a href="/kasir/transaksi/create" class="btn btn-primary mb-2"><i class="fas fa-plus"></i>Tambah</a>
                 <table class="table">
                     <tr>
                         <th>No</th>
@@ -20,7 +20,7 @@
                         <td>{{ $item->user->name ?? '-' }}</td>
                         <td>{{ $item->created_at }}</td>
                         <td>
-                            <a href="{{ url('/admin/transaksi/' . $item->id) }}" class="btn btn-sm btn-info">View</a>
+                            <a href="{{ url('/kasir/transaksi/' . $item->id) }}" class="btn btn-sm btn-info">View</a>
                             </a>
                         </td>
                     </tr>

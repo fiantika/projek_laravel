@@ -75,7 +75,7 @@
                     <input type="text" value="{{ 'Rp. '.format_rupiah($transaksi->dibayarkan - $transaksi->total) }}" class="form-control" disabled>
                 </div>
 
-                <a href="/admin/transaksi" class="btn btn-info"><i class="fas fa-arrow-left"></i> Kembali</a>
+                <a href="/kasir/transaksi" class="btn btn-info"><i class="fas fa-arrow-left"></i> Kembali</a>
 
             </div>
         </div>
