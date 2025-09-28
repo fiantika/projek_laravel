@@ -1,10 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-// Import authentication and transaction controllers from the Admin namespace.
-// Administrative controllers (Dashboard, User, Kategori, Produk) are no longer
-// imported because the "admin" role has been merged into the operator role.
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Admin\KategoriController as AdminKategoriController;
+use App\Http\Controllers\Admin\ProdukController as AdminProdukController;
 use App\Http\Controllers\Admin\TransaksiController as AdminTransaksiController;
 use App\Http\Controllers\KasirController;
 use App\Http\Controllers\Operator\DashboardController as OperatorDashboardController;
@@ -27,9 +28,19 @@ Route::middleware('guest')->group(function () {
 Route::get('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
 
-
-// NOTE: There is no separate "admin" role anymore. Administrative tasks are handled
-// within the operator prefix. The following admin route group has been removed.
+// ================== ADMIN ROUTES ==================
+// Routes for administrative tasks (user, produk, kategori). Only users
+// with the `admin` role may access these. Financial (keuangan) and
+// operator roles are not permitted here.
+Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
+    // Dashboard for admin
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    // User Management
+    Route::resource('/user', AdminUserController::class)->except(['show']);
+    // Produk & Kategori management
+    Route::resource('/produk', AdminProdukController::class);
+    Route::resource('/kategori', AdminKategoriController::class);
+});
 
 // ================== KASIR / KEUANGAN ROUTES ==================
 // Routes for financial (keuangan) users. Only users with the

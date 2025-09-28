@@ -18,16 +18,12 @@ class RedirectIfAuthenticated
             if (Auth::guard($guard)->check()) {
                 $user = Auth::guard($guard)->user();
 
-                // Redirect authenticated users based on their role. The "admin"
-                // role has been merged into the operator role, so only
-                // operator and keuangan roles are handled here.
-                if ($user->role === 'operator') {
-                    return redirect('/operator/dashboard');
-                } elseif ($user->role === 'keuangan') {
+                if ($user->role === 'admin') {
+                    return redirect('/admin/dashboard');
+                } elseif ($user->role === 'kasir') {
                     return redirect('/kasir/dashboard');
                 } else {
-                    // Fallback: send unknown roles to login page
-                    return redirect('/login');
+                    return redirect('/');
                 }
             }
         }

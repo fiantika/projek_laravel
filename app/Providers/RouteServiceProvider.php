@@ -17,10 +17,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    // The default home route. Since the "admin" role has been merged into the
-    // operator role, authenticated users are typically redirected to
-    // the operator dashboard after login.
-    public const HOME = '/operator/dashboard';
+    public const HOME = '/admin/dashboard';
 
     /**
      * Define your route model bindings, pattern filters, and other route configuration.

@@ -35,17 +35,20 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             Log::info('User logged in:', ['email' => $user->email, 'role' => $user->role]);
-        // Redirect based on role. The "admin" role has been merged into the
-        // operator role. Operators are sent to their dashboard and
-        // financial (keuangan) users are sent to the kasir dashboard.
-        if ($user->role === 'operator') {
-            return redirect('/operator/dashboard');
-        }
-        if ($user->role === 'keuangan') {
-            return redirect('/kasir/dashboard');
-        }
-        // Default fallback for unexpected roles
-        return redirect('/login');
+            // Redirect based on role. Administrators are sent to the
+            // admin dashboard, operators to the operator dashboard,
+            // and financial (keuangan) users to the kasir dashboard.
+            if ($user->role === 'admin') {
+                return redirect('/admin/dashboard');
+            }
+            if ($user->role === 'operator') {
+                return redirect('/operator/dashboard');
+            }
+            if ($user->role === 'keuangan') {
+                return redirect('/kasir/dashboard');
+            }
+            // Default fallback
+            return redirect('/login');
         }
         Log::warning('Login failed for email:', ['email' => $request->email]);
         return redirect()->back()->withErrors([

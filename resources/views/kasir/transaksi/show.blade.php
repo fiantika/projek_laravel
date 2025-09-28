@@ -62,17 +62,22 @@
 
                 <div class="form-group">
                     <label for="">Total Belanja</label>
-                    <input type="number" value="{{ $transaksi->total }}" class="form-control" disabled>
+                    <input type="text" value="{{ 'Rp. '.format_rupiah($transaksi->total) }}" class="form-control" disabled>
                 </div>
 
                 <div class="form-group">
                     <label for="">Dibayarkan</label>
-                    <input type="number" value="{{ $transaksi->dibayarkan }}" class="form-control" disabled>
+                    <input type="text" value="{{ 'Rp. '.format_rupiah($transaksi->dibayarkan) }}" class="form-control" disabled>
                 </div>
 
                 <div class="form-group">
                     <label for="">Uang Kembalian</label>
-                    <input type="text" value="{{ 'Rp. '.format_rupiah($transaksi->dibayarkan - $transaksi->total) }}" class="form-control" disabled>
+                    <input type="text" value="{{ 'Rp. '.format_rupiah(max(0, $transaksi->dibayarkan - $transaksi->total)) }}" class="form-control" disabled>
+                </div>
+
+                <div class="form-group">
+                    <label for="">Total Barang</label>
+                    <input type="text" value="{{ $transaksi->details->sum('qty') }}" class="form-control" disabled>
                 </div>
 
                 <a href="/kasir/transaksi" class="btn btn-info"><i class="fas fa-arrow-left"></i> Kembali</a>

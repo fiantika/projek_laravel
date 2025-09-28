@@ -18,8 +18,6 @@ class UserAkses
         if(auth()->user()->role == $role){
             return $next($request);
         }
-        // Redirect unauthorized users to the operator dashboard instead of the
-        // (removed) admin dashboard
-        return redirect('/operator/dashboard');
+        return redirect('admin');
     }
 }

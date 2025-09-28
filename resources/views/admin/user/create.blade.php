@@ -64,7 +64,7 @@
                         <label for=""><b>Role</b></label>
                         <select name="role" class="form-control @error('role') is-invalid @enderror">
                             <option value="">-- Pilih Role --</option>
-                            <!-- Admin role removed: only operator and keuangan roles are available -->
+                            <option value="admin" {{ (isset($user) && $user->role == 'admin') ? 'selected' : '' }}>Admin</option>
                             <option value="keuangan" {{ (isset($user) && $user->role == 'keuangan') ? 'selected' : '' }}>Keuangan (Kasir)</option>
                             <option value="operator" {{ (isset($user) && $user->role == 'operator') ? 'selected' : '' }}>Operator (Kasir)</option>
                         </select>

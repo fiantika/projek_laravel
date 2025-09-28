@@ -10,18 +10,28 @@
                     <tr>
                         <th>No</th>
                         <th>Nama Kasir</th>
+                        <th>Nama Produk</th>
+                        <th>Total Barang</th>
+                        <th>Total Harga</th>
                         <th>Tanggal</th>
                         <th>Action</th>
                     </tr>
 
                    @foreach ($transaksi as $item)
+                    @php
+                        // Extract product names and total quantity from the transaction details.
+                        $productNames = $item->details->pluck('produk_name')->implode(', ');
+                        $totalQty = $item->details->sum('qty');
+                    @endphp
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $item->user->name ?? '-' }}</td>
+                        <td>{{ $productNames ?: '-' }}</td>
+                        <td>{{ $totalQty ?: '0' }}</td>
+                        <td>Rp. {{ format_rupiah($item->total) }}</td>
                         <td>{{ $item->created_at }}</td>
                         <td>
                             <a href="{{ url('/kasir/transaksi/' . $item->id) }}" class="btn btn-sm btn-info">View</a>
-                            </a>
                         </td>
                     </tr>
                     @endforeach

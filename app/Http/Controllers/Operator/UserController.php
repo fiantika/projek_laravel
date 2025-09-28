@@ -53,8 +53,7 @@ class UserController extends Controller
             'email' => 'required|email|unique:users',
             'password' => 'required',
             're_password' => 'required|same:password',
-            // Restrict roles to operator or keuangan. The admin role has been removed.
-            'role' => 'required|in:operator,keuangan',
+            'role' => 'required',
         ]);
         $data['password'] = Hash::make($data['password']);
         unset($data['re_password']);
@@ -87,8 +86,7 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email,' . $user->id,
             'password' => 'nullable',
             're_password' => 'same:password',
-            // Restrict roles to operator or keuangan when updating
-            'role' => 'required|in:operator,keuangan',
+            'role' => 'required',
         ]);
         if ($request->password) {
             $data['password'] = Hash::make($request->password);
