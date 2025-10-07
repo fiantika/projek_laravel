@@ -8,7 +8,7 @@ maintaining a separate copy we avoid mixing assets across roles.
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>TokoKu | Operator</title>
+  <title>TokoKu | Admin</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -30,17 +30,6 @@ maintaining a separate copy we avoid mixing assets across roles.
     </ul>
 
     <!-- Right navbar links -->
-    <ul class="navbar-nav ml-auto">
-      <li class="nav-item">
-        <a class="nav-link" data-widget="fullscreen" href="#" role="button">
-          <i class="fas fa-expand-arrows-alt"></i>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a href="/logout" class="nav-link">
-          <i class="fas fa-sign-out-alt"></i>
-        </a>
-      </li>
-    </ul>
+
   </nav>
   <!-- /.navbar -->

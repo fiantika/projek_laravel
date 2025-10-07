@@ -70,6 +70,13 @@
                             </tr>
                         @endforelse
                     </tbody>
+
+                    <style>
+                    .content-wrapper {
+                        background: linear-gradient(135deg, hsl(250, 100%, 84%), hsl(250, 82%, 62%));
+                    }
+                    </style>
+
                 </table>
             </div>
         </div>

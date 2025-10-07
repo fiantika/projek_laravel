@@ -1,11 +1,16 @@
-<div class="row p-2">
-    <div class="col-m-6 col-sm-12">
-        <div class="card">
+<div class="card mb-3">
+  <div class="col-12 d-flex justify-content-between align-items-center mb-3" style="gap: 30px;">
+                <h5 class="mb-0" style="padding-top: 5px;"><b>{{ $title }}</b></h5>
+                <a href="/kasir/transaksi/create" class="btn btn-primary mt-2">
+                    <i class="fas fa-plus"></i> Tambah
+                </a>
+            </div>
+        </div>
+        
+        <div class="row p-2">
+            <div class="col-m-6 col-sm-12">
+                <div class="card">
 
-            <div class="card-body">
-                <h5><b>{{ $title }}</b></h5>
-
-                <a href="/kasir/transaksi/create" class="btn btn-primary mb-2"><i class="fas fa-plus"></i>Tambah</a>
                 <table class="table">
                     <tr>
                         <th>No</th>
@@ -43,4 +48,5 @@
             </div>
         </div>
     </div>
+
 </div>

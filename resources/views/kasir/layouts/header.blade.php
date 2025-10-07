@@ -7,7 +7,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Starter</title>
+  <title>Kasir | Tokoku</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -31,16 +31,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
      
-      <li class="nav-item">
-        <a class="nav-link" data-widget="fullscreen" href="#" role="button">
-          <i class="fas fa-expand-arrows-alt"></i>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a  href="/logout" class="nav-link" >
-          <i class="fas fa-sign-out-alt"></i>
-        </a>
-      </li>
+
+
     </ul>
   </nav>
   <!-- /.navbar -->
+  <style>
+    .content-wrapper {
+    background: linear-gradient(135deg, hsl(250, 100%, 84%), hsl(250, 82%, 62%));
+    }
+</style>  

@@ -44,8 +44,12 @@
                         @endforeach
                     </tbody>
                 </table>
-
             </div>
         </div>
     </div>
 </div>
+ <style>
+         .content-wrapper {
+           background: linear-gradient(135deg, hsl(250, 100%, 84%), hsl(250, 82%, 62%));
+         }
+    </style>

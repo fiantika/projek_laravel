@@ -1,3 +1,5 @@
+
+
 <div class="row p-2">
 
     <div class="col-md-6 col-sm-12">
@@ -79,10 +81,10 @@
                     <label for="">Total Barang</label>
                     <input type="text" value="{{ $transaksi->details->sum('qty') }}" class="form-control" disabled>
                 </div>
-
                 <a href="/kasir/transaksi" class="btn btn-info"><i class="fas fa-arrow-left"></i> Kembali</a>
 
             </div>
         </div>
     </div>
+    
 </div>

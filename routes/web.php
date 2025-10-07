@@ -25,7 +25,7 @@ Route::middleware('guest')->group(function () {
     Route::post('/login/do', [AuthController::class, 'doLogin']);
 });
 
-Route::get('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
 
 // ================== ADMIN ROUTES ==================

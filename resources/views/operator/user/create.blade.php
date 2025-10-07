@@ -64,9 +64,8 @@
                         <label for=""><b>Role</b></label>
                         <select name="role" class="form-control @error('role') is-invalid @enderror">
                             <option value="">-- Pilih Role --</option>
-                            <option value="admin" {{ (isset($user) && $user->role == 'admin') ? 'selected' : '' }}>Admin</option>
                             <option value="keuangan" {{ (isset($user) && $user->role == 'keuangan') ? 'selected' : '' }}>Keuangan (Kasir)</option>
-                            <option value="operator" {{ (isset($user) && $user->role == 'operator') ? 'selected' : '' }}>Operator (Kasir)</option>
+                            <option value="operator" {{ (isset($user) && $user->role == 'operator') ? 'selected' : '' }}>Operator (Admin)</option>
                         </select>
                         @error('role')
                             <div class="invalid-feedback">
@@ -83,3 +82,8 @@
         </div>
    </div>
 </div>
+<style>
+    .content-wrapper {
+    background: linear-gradient(135deg, hsl(250, 100%, 84%), hsl(250, 82%, 62%));
+    }
+</style>
