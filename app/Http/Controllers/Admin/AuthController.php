@@ -38,17 +38,15 @@ class AuthController extends Controller
             // Redirect based on role. Administrators are sent to the
             // admin dashboard, operators to the operator dashboard,
             // and financial (keuangan) users to the kasir dashboard.
-            if ($user->role === 'admin') {
-                return redirect('/admin/dashboard');
-            }
-            if ($user->role === 'operator') {
-                return redirect('/operator/dashboard');
-            }
-            if ($user->role === 'keuangan') {
-                return redirect('/kasir/dashboard');
-            }
-            // Default fallback
-            return redirect('/login');
+            switch ($user->role) {
+    case 'operator':
+        return redirect('/operator/dashboard');
+    case 'keuangan':
+        return redirect('/kasir/dashboard');
+    default:
+        return redirect('/login');
+}
+
         }
         Log::warning('Login failed for email:', ['email' => $request->email]);
         return redirect()->back()->withErrors([

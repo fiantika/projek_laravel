@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 class KasirController extends Controller
 {
     //
-    public function index()
+        public function index()
     {
         // Summarise transactional data for the cashier dashboard. We
         // calculate the number of transactions, the total quantity of

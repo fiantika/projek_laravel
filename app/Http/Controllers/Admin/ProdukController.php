@@ -52,15 +52,24 @@ class ProdukController extends Controller
             'name' => 'required',
             'kategori_id' => 'required',
             'harga' => 'required|integer',
+            'stok' => 'required|integer|min:0',
+            'berat' => 'nullable|numeric|min:0',
             'gambar' => 'nullable|image',
         ]);
+        // Assign stok and berat from request
+        $data['stok'] = $request->input('stok', 0);
+        $data['berat'] = $request->input('berat');
         // Handle image upload
         if ($request->hasFile('gambar')) {
             $gambar = $request->file('gambar');
             $fileName = time() . '_' . $gambar->getClientOriginalName();
-            $storage = 'uploads/images/';
-            $gambar->move($storage, $fileName);
-            $data['gambar'] = $storage . $fileName;
+            // Determine public upload directory
+            $destination = public_path('uploads/images');
+            if (!file_exists($destination)) {
+                mkdir($destination, 0777, true);
+            }
+            $gambar->move($destination, $fileName);
+            $data['gambar'] = 'uploads/images/' . $fileName;
         } else {
             $data['gambar'] = null;
         }
@@ -93,18 +102,27 @@ class ProdukController extends Controller
             'name' => 'required',
             'kategori_id' => 'required',
             'harga' => 'required|integer',
+            'stok' => 'required|integer|min:0',
+            'berat' => 'nullable|numeric|min:0',
             'gambar' => 'nullable|image',
         ]);
+        // Assign stok and berat from request (update)
+        $data['stok'] = $request->input('stok', $produk->stok);
+        $data['berat'] = $request->input('berat', $produk->berat);
         if ($request->hasFile('gambar')) {
             // delete old image if exists
             if ($produk->gambar) {
-                @unlink($produk->gambar);
+                @unlink(public_path($produk->gambar));
             }
             $gambar = $request->file('gambar');
             $fileName = time() . '_' . $gambar->getClientOriginalName();
-            $storage = 'uploads/images/';
-            $gambar->move($storage, $fileName);
-            $data['gambar'] = $storage . $fileName;
+            // Determine public upload directory
+            $destination = public_path('uploads/images');
+            if (!file_exists($destination)) {
+                mkdir($destination, 0777, true);
+            }
+            $gambar->move($destination, $fileName);
+            $data['gambar'] = 'uploads/images/' . $fileName;
         } else {
             $data['gambar'] = $produk->gambar;
         }
@@ -120,7 +138,7 @@ class ProdukController extends Controller
     {
         $produk = Produk::findOrFail($id);
         if ($produk->gambar) {
-            @unlink($produk->gambar);
+            @unlink(public_path($produk->gambar));
         }
         $produk->delete();
         Alert::success('Sukses', 'Produk berhasil dihapus');

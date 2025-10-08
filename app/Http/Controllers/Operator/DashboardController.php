@@ -19,10 +19,35 @@ class DashboardController extends Controller
      */
     public function index()
     {
+        // Compute basic statistics for the operator dashboard
+        $totalProduk    = \App\Models\Produk::count();
+        $totalKategori  = \App\Models\Kategori::count();
+        $totalUser      = \App\Models\User::count();
+        $totalTransaksi = \App\Models\Transaksi::count();
+
+        // Prepare chart data: labels = product names, stockData = current stock,
+        // soldData = total quantity sold across all transactions
+        $labels    = [];
+        $stockData = [];
+        $soldData  = [];
+        $produkAll = \App\Models\Produk::all();
+        foreach ($produkAll as $p) {
+            $labels[]    = $p->name;
+            $stockData[] = $p->stok ?? 0;
+            $soldQty     = \App\Models\TransaksiDetail::where('produk_id', $p->id)->sum('qty');
+            $soldData[]  = $soldQty;
+        }
+
         $data = [
-            // Use the operator dashboard view.  The wrapper will load
-            // `operator/dashboard/index.blade.php` into the content slot.
-            'content' => 'operator/dashboard/index',
+            'title'          => 'Dashboard Operator',
+            'totalProduk'    => $totalProduk,
+            'totalKategori'  => $totalKategori,
+            'totalUser'      => $totalUser,
+            'totalTransaksi' => $totalTransaksi,
+            'labels'         => $labels,
+            'stockData'      => $stockData,
+            'soldData'       => $soldData,
+            'content'        => 'operator/dashboard/index',
         ];
         return view('operator.layouts.wrapper', $data);
     }

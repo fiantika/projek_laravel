@@ -24,15 +24,9 @@ class TransaksiController extends Controller
      */
     public function index()
     {
-        // Load transactions along with the user and detail relationships.
-        // Including the details here allows the index view to display
-        // product names and quantities without executing additional
-        // queries per row. This also ensures eager loading of related
-        // models, preventing the N+1 query problem when iterating in
-        // the Blade template.
         $data = [
             'title' => 'Manajemen Transaksi',
-            'transaksi' => Transaksi::with(['user', 'details'])->orderBy('created_at', 'DESC')->paginate(10),
+            'transaksi' => Transaksi::with('user')->orderBy('created_at', 'DESC')->paginate(10),
             'content' => 'kasir/transaksi/index',
         ];
         return view('kasir.layouts.wrapper', $data);
@@ -113,22 +107,8 @@ class TransaksiController extends Controller
         if ($transaksi->user_id != auth()->id() && auth()->user()->role != 'keuangan') {
             return redirect('/kasir/transaksi')->with('error', 'Akses ditolak');
         }
-        // Capture payment amount if provided and persist it on the transaction.
-        $dibayarkan = request('dibayarkan');
-        if ($dibayarkan !== null) {
-            // Cast to integer to avoid string arithmetic. Only update when
-            // an explicit value is provided in the request.
-            $transaksi->dibayarkan = (int) $dibayarkan;
-            $transaksi->save();
-        }
-        // Compute change (kembalian). If dibayarkan is not set, it will
-        // default to zero. Never display negative change.
-        $paid = $transaksi->dibayarkan ?? 0;
-        $kembalian = $paid - $transaksi->total;
-        if ($kembalian < 0) {
-            $kembalian = 0;
-        }
-
+        $dibayarkan = request('dibayarkan', 0);
+        $kembalian = $dibayarkan - $transaksi->total;
         $transaksi_detail = TransaksiDetail::where('transaksi_id', $id)->get();
         $data = [
             'title' => 'Tambah Transaksi #' . $id,
@@ -140,7 +120,7 @@ class TransaksiController extends Controller
             'transaksi_detail' => $transaksi_detail,
             'transaksi' => $transaksi,
             'kembalian' => $kembalian,
-            'dibayarkan' => $transaksi->dibayarkan,
+            'dibayarkan' => $dibayarkan,
             'content' => 'kasir/transaksi/create',
         ];
         return view('kasir.layouts.wrapper', $data);
@@ -194,31 +174,25 @@ class TransaksiController extends Controller
             ->where('transaksi_id', $transaksi_id)
             ->first();
         $transaksi = Transaksi::findOrFail($transaksi_id);
-
-        // Recalculate the subtotal on the server to avoid trusting
-        // potentially manipulated client data. Always multiply the
-        // quantity by the product's price.
-        $subtotal = $produk->harga * $qty;
-
         if (!$td) {
             $data = [
                 'produk_id' => $produk_id,
                 'produk_name' => $request->produk_name,
                 'transaksi_id' => $transaksi_id,
                 'qty' => $qty,
-                'subtotal' => $subtotal,
+                'subtotal' => $request->subtotal,
             ];
             TransaksiDetail::create($data);
         } else {
             $new_qty = $td->qty + $qty;
             $td->update([
                 'qty' => $new_qty,
-                'subtotal' => $td->subtotal + $subtotal,
+                'subtotal' => $request->subtotal + $td->subtotal,
             ]);
         }
-        // Update the total on the transaction with the newly calculated subtotal
+        // Update total on transaction
         $transaksi->update([
-            'total' => $transaksi->total + $subtotal,
+            'total' => $transaksi->total + $request->subtotal,
         ]);
         // Reduce stock if exists
         if (isset($produk->stok)) {
@@ -259,11 +233,6 @@ class TransaksiController extends Controller
         $detailCount = TransaksiDetail::where('transaksi_id', $id)->count();
         if ($detailCount === 0) {
             return redirect()->back()->with('error', 'Transaksi kosong, tambahkan produk terlebih dahulu');
-        }
-        // Ensure payment has been made and is sufficient. If not, prevent
-        // completion to avoid pending transactions with unpaid totals.
-        if ($transaksi->dibayarkan < $transaksi->total) {
-            return redirect()->back()->with('error', 'Pembayaran belum cukup. Harap input jumlah yang dibayarkan.');
         }
         $transaksi->update([
             'status' => 'selesai',

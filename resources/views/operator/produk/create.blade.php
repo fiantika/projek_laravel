@@ -45,7 +45,24 @@
                             </div>
                         @enderror 
 
-                          <label for="">Gambar</label>
+                          
+
+                        <label for="">Berat (gram)</label>
+                        <input type="number" name="berat" step="0.01" class="form-control @error('berat') is-invalid @enderror" placeholder="Berat" value="{{ isset($produk) ? $produk->berat : old('berat') }}">
+                        @error('berat')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
+
+                        <label for="">Stok</label>
+                        <input type="number" name="stok" class="form-control @error('stok') is-invalid @enderror" placeholder="Stok" value="{{ isset($produk) ? $produk->stok : old('stok') }}">
+                        @error('stok')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
+    <label for="">Gambar</label>
                         <input type="file" name="gambar" class="form-control @error('gambar') is-invalid @enderror">
                         @error('gambar')
                             <div class="invalid-feedback">
@@ -55,7 +72,7 @@
 
                         @isset($produk)
                             @if($produk->gambar)
-                            <img src="/{{ $produk->gambar }}" width="100px" alt="">
+                            <img src="{{ isset($produk->gambar) ? asset($produk->gambar) : '' }}" width="100px" alt="">
                             @endif
                         @endisset
                         <br>
