@@ -1,223 +1,118 @@
-  <!-- Main Sidebar Container -->
-  <aside class="main-sidebar elevation-4 sidebar-pastel">
-
-    <!-- Brand Logo -->
-    <div href="index3.html" class="brand-link">
-      <!-- <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">}] -->
-      <span class="brand-text font-weight-light">Tokoku</span>
-      <i class="fas fa-cash-register nav-icon"></i>
-  </div>
-
-    
-
-    <!-- Sidebar -->
-    <div class="sidebar">
-
-      <!-- Sidebar Menu -->
-      <nav class="mt-2">
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
-          
-          <li class="nav-item">
-            <a href="/kasir/dashboard" class="nav-link {{ Request::is('kasir/dashboard') ? 'active' : '' }}">
-              <i class="nav-icon fas fa-th"></i>
-              <p>Dashboard</p>
-            </a>
-          </li>
-
-          <li class="nav-item">
-            <a href="/kasir/transaksi" class="nav-link {{ Request::is('kasir/transaksi*') ? 'active' : '' }}">
-              <i class="nav-icon fas fa-exchange-alt"></i>
-              <p>Transaksi</p>
-            </a>
-          </li>
-        </li>
-
-    <li class="nav-separator"></li>
-
-      <li class="nav-item">
-    <form action="{{ route('logout') }}" method="POST">
-      @csrf
-      <button type="submit" class="nav-link border-0 bg-transparent text-left w-100">
-        <i class="nav-icon fas fa-sign-out-alt"></i>
-        <p>Logout</p>
-      </button>
-    </form>
-  </li>
-
-
-
-        </ul>
-      </nav>
-      <!-- /.sidebar-menu -->
+<!-- New Sidebar for Keuangan/Kasir -->
+<aside class="new-sidebar">
+    <div class="sidebar-header d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Tokoku</h4>
+        <span class="role-badge">Keuangan</span>
     </div>
-    <!-- /.sidebar -->
-  </aside>
+    <ul class="sidebar-menu">
+        <li>
+            <a href="/kasir/dashboard" class="{{ Request::is('kasir/dashboard') ? 'active' : '' }}">
+                <i class="fas fa-home"></i>
+                Dashboard
+            </a>
+        </li>
+        <li>
+            <a href="/kasir/transaksi" class="{{ Request::is('kasir/transaksi*') ? 'active' : '' }}">
+                <i class="fas fa-receipt"></i>
+                Transaksi
+            </a>
+        </li>
+        <hr style="border-color: rgba(255,255,255,0.2); margin: 20px 0;">
+        <li>
+            <a href="#" onclick="return false;">
+                <i class="fas fa-user"></i>
+                Profil
+            </a>
+        </li>
+        <li>
+            <a href="#" onclick="return false;">
+                <i class="fas fa-cog"></i>
+                Pengaturan
+            </a>
+        </li>
+        <li>
+            <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                @csrf
+                <button type="submit" class="border-0 bg-transparent p-0 w-100 text-start text-danger" style="display:flex; align-items:center; padding:12px 20px; color:rgba(255,255,255,0.8);">
+                    <i class="fas fa-sign-out-alt me-2"></i> Logout
+                </button>
+            </form>
+        </li>
+    </ul>
+</aside>
 
-  <style>
-
-.sidebar-pastel {
-  --sidebar-bg: hsl(250, 55%, 66%);
-  --sidebar-accent: #c4b5fd;
-  --sidebar-accent-strong: #a78bfa;
-  --sidebar-text: #ffffff;
-  --sidebar-border: #e5e7eb;
+<style>
+.new-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 260px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    z-index: 1000;
+    overflow-y: auto;
+}
+.new-sidebar .sidebar-header {
+    padding: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.new-sidebar .sidebar-menu {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+.new-sidebar .sidebar-menu li {
+    margin: 0;
+}
+.new-sidebar .sidebar-menu a,
+.new-sidebar .sidebar-menu button {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 12px 20px;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+    background: none;
+}
+.new-sidebar .sidebar-menu a i,
+.new-sidebar .sidebar-menu button i {
+    margin-right: 10px;
+    width: 20px;
+    text-align: center;
+}
+.new-sidebar .sidebar-menu a:hover,
+.new-sidebar .sidebar-menu button:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border-left-color: #fff;
+}
+.new-sidebar .sidebar-menu a.active {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border-left-color: #ffd700;
+}
+.role-badge {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-.sidebar-pastel.main-sidebar {
-  background-color: var(--sidebar-bg) !important;
-  color: var(--sidebar-text);
+/* Shift wrapper to accommodate sidebar on larger screens */
+@media (min-width: 992px) {
+    .wrapper {
+        margin-left: 260px;
+    }
 }
 
-.sidebar-pastel .brand-link {
-  background-color: var(--sidebar-bg) !important;
-  color: var(--sidebar-text) !important;
-  border-bottom: 1px solid var(--sidebar-border);
-  font-weight: 600;
+@media (max-width: 991.98px) {
+    .wrapper {
+        margin-left: 0;
+    }
 }
-
-.sidebar-pastel .brand-link:hover {
-  background-color: rgba(196, 181, 253, 0.25);
-}
-
-.sidebar-pastel .sidebar {
-  padding-top: 0.25rem;
-}
-
-/* Nav links */
-.sidebar-pastel .nav-sidebar .nav-link {
-  color: var(--sidebar-text) !important;
-  border-radius: 10px;
-  margin: 4px 8px;
-  transition: background-color .2s ease, color .2s ease, box-shadow .2s ease;
-}
-
-.sidebar-pastel .nav-sidebar .nav-link .nav-icon {
-  color: var(--sidebar-accent-strong) !important;
-}
-
-.sidebar-pastel .nav-sidebar .nav-link:hover {
-  background-color: rgba(167, 139, 250, 0.15);
-  color: var(--sidebar-text) !important;
-}
-
-.sidebar-pastel .nav-sidebar .nav-link:focus-visible {
-  outline: 2px solid var(--sidebar-accent-strong);
-  outline-offset: 2px;
-}
-
-.sidebar-pastel .nav-sidebar .nav-link.active {
-  background-color: var(--sidebar-accent) !important;
-  color: var(--sidebar-text) !important;
-  box-shadow: 0 2px 6px rgba(167, 139, 250, 0.35);
-}
-
-.sidebar-pastel .nav-sidebar .nav-link.active .nav-icon {
-  color: var(--sidebar-text) !important;
-}
-
-.sidebar-pastel .nav-sidebar > .nav-item > .nav-link.active,
-.sidebar-pastel .nav-sidebar > .nav-item > .nav-link:hover {
-  border-left: 3px solid var(--sidebar-accent-strong);
-}
-
-/* Treeview */
-.sidebar-pastel .nav-treeview > .nav-item > .nav-link {
-  margin-left: 16px;
-  border-radius: 8px;
-}
-
-/* Elevation softness */
-.sidebar-pastel.elevation-4 {
-  box-shadow: 0 10px 20px -5px rgba(167, 139, 250, 0.25), 0 6px 10px -6px rgba(31, 41, 55, 0.2) !important;
-}
-
-/* Hilangkan scrollbar sidebar */
-.sidebar .os-scrollbar,
-.sidebar .os-scrollbar-handle {
-  display: none !important;
-}
-
-/* Pastikan sidebar gak bisa geser horizontal */
-.sidebar {
-  overflow-x: hidden !important;
-}
-
-/* Bikin tulisan Tokoku | Kasir rata tengah */
-.sidebar-pastel .brand-link {
-  display: flex;
-  justify-content: center;   /* rata tengah horizontal */
-  align-items: center;       /* rata tengah vertical */
-  text-align: center;
-  font-weight: bold;
-  font-size: 18px;
-}
-
-.sidebar-pastel .brand-link {
-  display: flex;
-  justify-content: center;   /* tengahin isi */
-  align-items: center;       /* vertikal sejajar */
-  gap: 8px;                  /* jarak antara logo & tulisan */
-  text-align: center;
-  font-weight: bold;
-  font-size: 18px;
-}
-
-.sidebar-pastel .brand-link .brand-image {
-  height: 30px;       /* tinggi logo */
-  width: auto;        /* biar proporsional */
-  border-radius: 6px; /* opsional, biar sudut logo agak halus */
-}
-
-/* Styling tombol logout biar mirip nav-link */
-.sidebar-pastel .btn-logout {
-  background: none;
-  border: none;
-  width: 100%;
-  text-align: left;
-  padding: 0.5rem 1rem;
-  color: var(--sidebar-text);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  border-radius: 10px;
-  transition: background-color .2s;
-}
-
-.sidebar-pastel .btn-logout:hover {
-  background-color: rgba(251, 251, 251, 0.15);
-  color: var(--sidebar-text);
-}
-
-.sidebar-pastel .btn-logout .nav-icon {
-  color: var(--sidebar-accent-strong);
-}
-
-.nav-separator {
-  border-top: 1px solid rgb(255, 255, 255); /* garis tipis */
-  margin: 10px 0;
-}
-
-/* Normal (sidebar terbuka) */
-.brand-link {
-  display: flex;
-  align-items: center;
-  justify-content: center; /* biar tengah di mode normal */
-}
-
-/* Kalau sidebar collapse */
-.sidebar-collapse .brand-link {
-  justify-content: center;   /* paksa logo ke tengah */
-  text-align: center;
-}
-
-.sidebar-collapse .brand-link .brand-text {
-  display: none; /* teks 'Tokoku | Kasir' sembunyi pas collapse */
-}
-
-
-  </style>
-
-  <div class="content-wrapper">
+</style>

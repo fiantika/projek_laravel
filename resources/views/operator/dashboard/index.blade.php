@@ -45,11 +45,32 @@
     </div>
 </div>
 
+<!-- Grafik tren stok masuk/keluar -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Grafik Stok Masuk vs Keluar (Harian)</h6>
+    </div>
+    <div class="card-body">
+        <canvas id="stokTrenChart" height="100"></canvas>
+    </div>
+</div>
+
+<!-- Grafik produk terlaris -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Produk Terlaris</h6>
+    </div>
+    <div class="card-body">
+        <canvas id="topProdukChart" height="100"></canvas>
+    </div>
+</div>
+
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const ctx = document.getElementById('stokChart').getContext('2d');
-    const stokChart = new Chart(ctx, {
+    // Grafik stok vs terjual per produk
+    const stokCtx = document.getElementById('stokChart').getContext('2d');
+    const stokChart = new Chart(stokCtx, {
         type: 'line',
         data: {
             labels: {!! json_encode($labels) !!},
@@ -57,14 +78,12 @@
                 {
                     label: 'Stok',
                     data: {!! json_encode($stockData) !!},
-                    borderColor: 'rgb(75, 192, 192)',
                     tension: 0.1,
                     fill: false,
                 },
                 {
                     label: 'Terjual',
                     data: {!! json_encode($soldData) !!},
-                    borderColor: 'rgb(255, 99, 132)',
                     tension: 0.1,
                     fill: false,
                 }
@@ -74,10 +93,56 @@
             responsive: true,
             maintainAspectRatio: false,
             scales: {
-                y: {
-                    beginAtZero: true
-                }
+                y: { beginAtZero: true }
             }
+        }
+    });
+
+    // Grafik stok masuk vs keluar per hari
+    const trenCtx = document.getElementById('stokTrenChart').getContext('2d');
+    const stokTrenChart = new Chart(trenCtx, {
+        type: 'line',
+        data: {
+            labels: {!! json_encode($dates) !!},
+            datasets: [
+                {
+                    label: 'Stok Masuk',
+                    data: {!! json_encode($stokInData) !!},
+                    tension: 0.1,
+                    fill: false,
+                },
+                {
+                    label: 'Stok Keluar',
+                    data: {!! json_encode($stokOutData) !!},
+                    tension: 0.1,
+                    fill: false,
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+
+    // Grafik produk terlaris (pie chart)
+    const topCtx = document.getElementById('topProdukChart').getContext('2d');
+    const topProdukChart = new Chart(topCtx, {
+        type: 'pie',
+        data: {
+            labels: {!! json_encode($topProdukLabels) !!},
+            datasets: [
+                {
+                    data: {!! json_encode($topProdukQty) !!},
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
         }
     });
 </script>

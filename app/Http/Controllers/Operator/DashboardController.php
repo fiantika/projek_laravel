@@ -38,16 +38,48 @@ class DashboardController extends Controller
             $soldData[]  = $soldQty;
         }
 
+        // Hitung stok masuk dan keluar per hari untuk grafik tren
+        $stokHistories = \App\Models\StokHistory::selectRaw('DATE(created_at) as date, type, SUM(qty) as total')
+            ->groupBy('date', 'type')
+            ->orderBy('date')
+            ->get();
+        // Koleksi semua tanggal unik
+        $dates = $stokHistories->pluck('date')->unique()->values()->all();
+        // Siapkan array nilai default untuk setiap tanggal
+        $stokInData = [];
+        $stokOutData = [];
+        foreach ($dates as $d) {
+            // total masuk untuk tanggal ini
+            $in = $stokHistories->firstWhere(fn($h) => $h->date == $d && $h->type === 'in');
+            $out = $stokHistories->firstWhere(fn($h) => $h->date == $d && $h->type === 'out');
+            $stokInData[] = $in ? (int) $in->total : 0;
+            $stokOutData[] = $out ? (int) $out->total : 0;
+        }
+
+        // Hitung produk terlaris untuk pie chart
+        $topProdukData = \App\Models\TransaksiDetail::selectRaw('produk_name, SUM(qty) as total')
+            ->groupBy('produk_name')
+            ->orderByDesc('total')
+            ->limit(5)
+            ->get();
+        $topProdukLabels = $topProdukData->pluck('produk_name')->all();
+        $topProdukQty    = $topProdukData->pluck('total')->map(fn($v) => (int) $v)->all();
+
         $data = [
-            'title'          => 'Dashboard Operator',
-            'totalProduk'    => $totalProduk,
-            'totalKategori'  => $totalKategori,
-            'totalUser'      => $totalUser,
-            'totalTransaksi' => $totalTransaksi,
-            'labels'         => $labels,
-            'stockData'      => $stockData,
-            'soldData'       => $soldData,
-            'content'        => 'operator/dashboard/index',
+            'title'             => 'Dashboard Operator',
+            'totalProduk'       => $totalProduk,
+            'totalKategori'     => $totalKategori,
+            'totalUser'         => $totalUser,
+            'totalTransaksi'    => $totalTransaksi,
+            'labels'            => $labels,
+            'stockData'         => $stockData,
+            'soldData'          => $soldData,
+            'dates'             => $dates,
+            'stokInData'        => $stokInData,
+            'stokOutData'       => $stokOutData,
+            'topProdukLabels'   => $topProdukLabels,
+            'topProdukQty'      => $topProdukQty,
+            'content'           => 'operator/dashboard/index',
         ];
         return view('operator.layouts.wrapper', $data);
     }

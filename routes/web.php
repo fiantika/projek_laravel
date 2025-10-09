@@ -69,6 +69,10 @@ Route::prefix('operator')->middleware(['auth', 'role:operator'])->group(function
     // Produk & Kategori management
     Route::resource('/produk', OperatorProdukController::class);
     Route::resource('/kategori', OperatorKategoriController::class);
+
+    // Manajemen stok (stok masuk) untuk operator
+    Route::get('/stok', [\App\Http\Controllers\Operator\StokController::class, 'index'])->name('operator.stok.index');
+    Route::post('/stok', [\App\Http\Controllers\Operator\StokController::class, 'store'])->name('operator.stok.store');
 });
 
 

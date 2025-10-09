@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Produk;
 use App\Models\Transaksi;
 use App\Models\TransaksiDetail;
+use App\Models\StokHistory;
 use Illuminate\Http\Request;
 
 /**
@@ -144,6 +145,12 @@ class TransaksiController extends Controller
                 $produk->update([
                     'stok' => $produk->stok + $detail->qty,
                 ]);
+                // Catat stok masuk karena transaksi dibatalkan
+                StokHistory::create([
+                    'produk_id' => $produk->id,
+                    'qty' => $detail->qty,
+                    'type' => 'in',
+                ]);
             }
             $detail->delete();
         }
@@ -199,6 +206,12 @@ class TransaksiController extends Controller
             $produk->update([
                 'stok' => $produk->stok - $qty,
             ]);
+            // Catat stok keluar
+            StokHistory::create([
+                'produk_id' => $produk->id,
+                'qty' => $qty,
+                'type' => 'out',
+            ]);
         }
         return redirect('/kasir/transaksi/' . $transaksi_id . '/edit')->with('success', 'Item berhasil ditambahkan');
     }
@@ -215,6 +228,12 @@ class TransaksiController extends Controller
         if ($produk && isset($produk->stok)) {
             $produk->update([
                 'stok' => $produk->stok + $td->qty,
+            ]);
+            // Catat stok masuk karena item dihapus dari transaksi
+            StokHistory::create([
+                'produk_id' => $produk->id,
+                'qty' => $td->qty,
+                'type' => 'in',
             ]);
         }
         $transaksi->update([

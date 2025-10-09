@@ -15,10 +15,21 @@ class RoleMiddleware
      */
     public function handle($request, Closure $next, $role)
     {
-        if (auth()->check() && auth()->user()->role == $role) {
-            return $next($request);
+        if (auth()->check()) {
+            $userRole = auth()->user()->role;
+            // Define mapping: treat 'admin' as 'operator' and 'kasir' as 'keuangan'
+            $synonyms = [
+                'admin'   => 'operator',
+                'operator' => 'operator',
+                'keuangan' => 'keuangan',
+                'kasir'   => 'keuangan',
+            ];
+            $normalizedUserRole = $synonyms[$userRole] ?? $userRole;
+            $normalizedRequired = $synonyms[$role] ?? $role;
+            if ($normalizedUserRole === $normalizedRequired) {
+                return $next($request);
+            }
         }
-
         abort(403, 'Unauthorized');
     }
 
