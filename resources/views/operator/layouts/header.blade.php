@@ -16,28 +16,46 @@ maintaining a separate copy we avoid mixing assets across roles.
   <link rel="stylesheet" href="/vendor/admin/plugins/fontawesome-free/css/all.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="/vendor/admin/dist/css/adminlte.min.css?v=3.2.0">
+
+  <!-- Custom global theme styles: purple gradient buttons and cards -->
+  <style>
+    :root {
+      --primary-gradient-start: #667eea;
+      --primary-gradient-end: #764ba2;
+    }
+    /* Apply gradient to primary and success buttons */
+    .btn-primary,
+    .btn-success {
+      background: linear-gradient(135deg, var(--primary-gradient-start) 0%, var(--primary-gradient-end) 100%) !important;
+      border: none !important;
+      color: #fff !important;
+    }
+    .btn-danger {
+      background: linear-gradient(135deg, #e3342f 0%, #f75f5f 100%) !important;
+      border: none !important;
+      color: #fff !important;
+    }
+    /* Soften card appearance */
+    .card,
+    .shadow,
+    .rounded {
+      border-radius: 12px !important;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    }
+    /* Gradient navbar header */
+    .navbar,
+    .main-header {
+      background: linear-gradient(135deg, var(--primary-gradient-start) 0%, var(--primary-gradient-end) 100%) !important;
+      color: #fff;
+    }
+    .navbar .nav-link i {
+      color: #fff;
+    }
+  </style>
 </head>
-<body class="hold-transition sidebar-mini">
+<body class="hold-transition">
 <div class="wrapper">
 
-  <!-- Navbar -->
-  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-    <!-- Left navbar links -->
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
-      </li>
-    </ul>
-
-    <!-- Right navbar links -->
-    <ul class="navbar-nav ml-auto">
-      <li class="nav-item">
-        <a class="nav-link" data-widget="fullscreen" href="#" role="button">
-          <i class="fas fa-expand-arrows-alt"></i>
-        </a>
-      </li>
-    </ul>
-  </nav>
   <!-- /.navbar -->
   <style>
          .content-wrapper {

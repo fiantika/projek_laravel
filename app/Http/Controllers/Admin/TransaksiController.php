@@ -25,9 +25,16 @@ class TransaksiController extends Controller
      */
     public function index()
     {
+        // Only display completed transactions on the listing. Pending drafts
+        // should not appear in the table so that unfinished transactions do
+        // not clutter the list. Transactions with status "pending" are
+        // therefore filtered out here.
         $data = [
             'title' => 'Manajemen Transaksi',
-            'transaksi' => Transaksi::with('user')->orderBy('created_at', 'DESC')->paginate(10),
+            'transaksi' => Transaksi::with('user')
+                ->where('status', 'selesai')
+                ->orderBy('created_at', 'DESC')
+                ->paginate(10),
             'content' => 'kasir/transaksi/index',
         ];
         return view('kasir.layouts.wrapper', $data);
@@ -246,16 +253,49 @@ class TransaksiController extends Controller
     /**
      * Mark a transaction as completed.
      */
-    public function complete($id)
+    public function complete(Request $request, $id)
     {
         $transaksi = Transaksi::findOrFail($id);
+        // Pastikan transaksi memiliki item sebelum dapat diselesaikan.
         $detailCount = TransaksiDetail::where('transaksi_id', $id)->count();
         if ($detailCount === 0) {
             return redirect()->back()->with('error', 'Transaksi kosong, tambahkan produk terlebih dahulu');
         }
+        // Ambil nominal pembayaran dari request. Parameter ini dikirim dari
+        // halaman edit melalui query string (?bayar=) atau form. Nilai
+        // default null menunjukkan belum ada pembayaran.
+        $bayar = $request->input('bayar');
+        // Jika nominal pembayaran tidak diisi, transaksi tidak boleh
+        // diselesaikan.
+        if ($bayar === null || $bayar === '') {
+            return redirect()->back()->with('error', 'Transaksi belum dibayar');
+        }
+        // Jika jumlah uang yang dibayarkan kurang dari total belanja,
+        // jangan izinkan transaksi disimpan. Tampilkan pesan kesalahan.
+        if ((float) $bayar < (float) $transaksi->total) {
+            return redirect()->back()->with('error', 'Uang yang dibayarkan kurang dari total belanja');
+        }
+        // Tandai transaksi selesai dan simpan nominal bayar serta kembalian
+        // jika kolom tersebut tersedia pada tabel. Jika kolom tidak
+        // tersedia, nilai ini diabaikan oleh Eloquent (unguarded fields).
+        // Tandai transaksi selesai. Nilai dibayarkan dan kembalian hanya
+        // digunakan untuk validasi dan tidak disimpan ke tabel karena
+        // kolom tersebut tidak tersedia pada skema transaksis.
         $transaksi->update([
             'status' => 'selesai',
         ]);
         return redirect('/kasir/transaksi')->with('success', 'Transaksi berhasil diselesaikan');
+    }
+
+    /**
+     * Batalkan transaksi yang belum selesai (status pending).
+     * Menghapus transaksi dan mengembalikan stok seperti pada destroy().
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function cancel($id)
+    {
+        return $this->destroy($id);
     }
 }

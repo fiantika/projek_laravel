@@ -7,6 +7,17 @@
     interaksi tetap sama dengan halaman lama, hanya tampilan yang berubah.
 --}}
 
+@if (session('error'))
+    <div class="bg-red-100 border border-red-400 text-red-700 p-2 mx-4 my-2 rounded">
+        {{ session('error') }}
+    </div>
+@endif
+@if (session('success'))
+    <div class="bg-green-100 border border-green-400 text-green-700 p-2 mx-4 my-2 rounded">
+        {{ session('success') }}
+    </div>
+@endif
+
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
     <!-- Kolom kiri: Pilih produk dan form tambah detail -->
     <div class="bg-white rounded shadow p-4">
@@ -57,13 +68,14 @@
                 <p class="font-semibold">Subtotal: Rp. <span id="subtotalDisplay">{{ format_rupiah($subtotal) }}</span></p>
             </div>
             <div class="flex space-x-2">
-                <a href="/kasir/transaksi" class="px-4 py-2 btn btn-danger">Kembali</a>
+                <!-- Button to cancel (delete) the transaction. Redirects to cancel route -->
+                <a href="{{ route('kasir.transaksi.cancel', ['id' => $transaksi_id ?? Request::segment(3)]) }}" class="px-4 py-2 btn btn-danger">Kembali</a>
                 <button type="submit" class="px-4 py-2 btn btn-primary">Tambah</button>
             </div>
         </form>
     </div>
     <!-- Kolom kanan: daftar detail transaksi dan tindakan -->
-    <div class="bg-white rounded shadow p-4">
+    <div class="bg-white rounded shadow p-4 mt-4">
         <table class="min-w-full divide-y divide-gray-200 text-sm">
             <thead>
                 <tr class="bg-gray-50">
@@ -89,8 +101,8 @@
             </tbody>
         </table>
         <div class="mt-4 flex space-x-2">
-            <a href="/kasir/transaksi/detail/selesai/{{ Request::segment(3) }}" class="px-4 py-2 btn btn-success">Selesai</a>
-            <a href="#" class="px-4 py-2 bg-blue-400 hover:bg-blue-500 text-white rounded">Pending</a>
+            <!-- Complete button passes the amount paid via query string for validation -->
+            <a href="{{ route('kasir.transaksi.detail.done', ['id' => Request::segment(3)]) }}?bayar={{ $dibayarkan ?? 0 }}" class="px-4 py-2 btn btn-success">Selesai</a>
         </div>
     </div>
 </div>

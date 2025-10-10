@@ -25,7 +25,7 @@ Route::middleware('guest')->group(function () {
     Route::post('/login/do', [AuthController::class, 'doLogin']);
 });
 
-Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
+Route::get('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
 
 // ================== ADMIN ROUTES ==================
@@ -55,6 +55,14 @@ Route::prefix('kasir')->middleware(['auth', 'role:keuangan'])->group(function ()
     Route::get('/transaksi/detail/selesai/{id}', [AdminTransaksiController::class, 'complete'])->name('kasir.transaksi.detail.done');
     Route::get('/transaksi/detail/delete', [AdminTransaksiController::class, 'removeDetail'])->name('kasir.transaksi.detail.delete');
     Route::post('/transaksi/detail/create', [AdminTransaksiController::class, 'addDetail'])->name('kasir.transaksi.detail.create');
+
+    // Endpoint to cancel (delete) a pending transaction via GET. This
+    // route is used when the cashier presses "Kembali" to abort a
+    // transaction before it is completed. It invokes the same logic as
+    // destroy() to restore stock and remove the record. Using a GET
+    // request here simplifies linking from the view without hidden form
+    // methods.
+    Route::get('/transaksi/cancel/{id}', [AdminTransaksiController::class, 'cancel'])->name('kasir.transaksi.cancel');
 });
 
 // ================== OPERATOR ROUTES ==================

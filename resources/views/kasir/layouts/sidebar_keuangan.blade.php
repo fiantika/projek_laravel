@@ -19,24 +19,9 @@
         </li>
         <hr style="border-color: rgba(255,255,255,0.2); margin: 20px 0;">
         <li>
-            <a href="#" onclick="return false;">
-                <i class="fas fa-user"></i>
-                Profil
+            <a href="{{ route('logout') }}" class="text-danger">
+                <i class="fas fa-sign-out-alt me-2"></i> Logout
             </a>
-        </li>
-        <li>
-            <a href="#" onclick="return false;">
-                <i class="fas fa-cog"></i>
-                Pengaturan
-            </a>
-        </li>
-        <li>
-            <form action="{{ route('logout') }}" method="POST" style="display: inline;">
-                @csrf
-                <button type="submit" class="border-0 bg-transparent p-0 w-100 text-start text-danger" style="display:flex; align-items:center; padding:12px 20px; color:rgba(255,255,255,0.8);">
-                    <i class="fas fa-sign-out-alt me-2"></i> Logout
-                </button>
-            </form>
         </li>
     </ul>
 </aside>
