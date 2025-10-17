@@ -56,6 +56,8 @@ maintaining a separate copy we avoid mixing assets across roles.
 <body class="hold-transition">
 <div class="wrapper">
 
+  <!-- Navbar -->
+
   <!-- /.navbar -->
   <style>
          .content-wrapper {

@@ -7,56 +7,49 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
-/**
- * Authentication controller for the back office.
- *
- * This class unifies the login and logout functionality for all roles.
- * After a successful login, users are redirected based on their role:
- * - `admin`: directed to the admin dashboard.
- * - `operator`: directed to the operator dashboard.
- * - `keuangan`: directed to the financial (kasir) dashboard.
- */
 class AuthController extends Controller
 {
-    /**
-     * Display the login form.
-     */
     public function index()
     {
         return view('auth.login');
     }
 
-    /**
-     * Handle an authentication attempt.
-     */
     public function doLogin(Request $request)
     {
         $credentials = $request->only('email', 'password');
+
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
-            Log::info('User logged in:', ['email' => $user->email, 'role' => $user->role]);
-            // Redirect based on role. Administrators are sent to the
-            // admin dashboard, operators to the operator dashboard,
-            // and financial (keuangan) users to the kasir dashboard.
-            switch ($user->role) {
-    case 'operator':
-        return redirect('/operator/dashboard');
-    case 'keuangan':
-        return redirect('/kasir/dashboard');
-    default:
-        return redirect('/login');
-}
+            $request->session()->regenerate();
 
+            // Session swal untuk notif animasi
+            $swal = [
+                'icon' => 'success',
+                'title' => 'Login Berhasil!',
+                'text' => 'Selamat datang, ' . $user->name
+            ];
+
+            Log::info('User logged in:', ['email' => $user->email, 'role' => $user->role]);
+
+            switch ($user->role) {
+                case 'operator':
+                    return redirect('/operator/dashboard')->with('swal', $swal);
+                case 'keuangan':
+                    return redirect('/kasir/dashboard')->with('swal', $swal);
+                case 'admin':
+                    return redirect('/admin/dashboard')->with('swal', $swal);
+                default:
+                    Auth::logout();
+                    return redirect('/login');
+            }
         }
+
         Log::warning('Login failed for email:', ['email' => $request->email]);
-        return redirect()->back()->withErrors([
-            'email' => 'Email atau password salah',
+        return back()->withErrors([
+            'email' => 'Email atau password salah.',
         ]);
     }
 
-    /**
-     * Log the user out of the application.
-     */
     public function logout()
     {
         Auth::logout();

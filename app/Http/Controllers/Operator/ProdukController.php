@@ -21,15 +21,16 @@ class ProdukController extends Controller
     /**
      * Display a listing of the products.
      */
-    public function index()
-    {
-        $data = [
-            'title' => 'Manajemen Produk',
-            'produk' => Produk::paginate(10),
-            'content' => 'operator/produk/index',
-        ];
-        return view('operator.layouts.wrapper', $data);
-    }
+public function index()
+{
+    $data = [
+        'title' => 'Manajemen Produk',
+        'produk' => Produk::with('kategori')->paginate(10),
+        'content' => 'operator/produk/index',
+    ];
+    return view('operator.layouts.wrapper', $data);
+}
+
 
     /**
      * Show the form for creating a new product.
@@ -53,13 +54,11 @@ class ProdukController extends Controller
             'name' => 'required',
             'kategori_id' => 'required',
             'harga' => 'required|integer',
-            'stok' => 'required|integer|min:0',
             'berat' => 'nullable|numeric|min:0',
             'gambar' => 'nullable|image',
         ]);
         // Assign stok and berat from request
         // Assign stok and berat from request
-        $data['stok'] = $request->input('stok', 0);
         $data['berat'] = $request->input('berat');
         // Handle image upload
         if ($request->hasFile('gambar')) {
@@ -104,12 +103,10 @@ class ProdukController extends Controller
             'name' => 'required',
             'kategori_id' => 'required',
             'harga' => 'required|integer',
-            'stok' => 'required|integer|min:0',
             'berat' => 'nullable|numeric|min:0',
             'gambar' => 'nullable|image',
         ]);
         // Assign stok and berat from request (update)
-        $data['stok'] = $request->input('stok', $produk->stok);
         $data['berat'] = $request->input('berat', $produk->berat);
         if ($request->hasFile('gambar')) {
             // delete old image if exists

@@ -66,7 +66,7 @@ class DashboardController extends Controller
         $topProdukQty    = $topProdukData->pluck('total')->map(fn($v) => (int) $v)->all();
 
         $data = [
-            'title'             => 'Dashboard Operator',
+            'title'             => 'Dashboard Admin',
             'totalProduk'       => $totalProduk,
             'totalKategori'     => $totalKategori,
             'totalUser'         => $totalUser,

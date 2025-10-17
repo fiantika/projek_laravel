@@ -21,15 +21,15 @@ class UserController extends Controller
     /**
      * Display a listing of users.
      */
-    public function index()
-    {
-        $data = [
-            'title' => 'Manajemen User',
-            'user'  => User::all(),
-            'content' => 'operator/user/index',
-        ];
-        return view('operator.layouts.wrapper', $data);
-    }
+   public function index()
+{
+    $data = [
+        'title' => 'Manajemen User',
+        'users' => User::all(), // ✅ plural
+        'content' => 'operator/user/index',
+    ];
+    return view('operator.layouts.wrapper', $data);
+}
 
     /**
      * Show the form for creating a new user.
@@ -78,26 +78,40 @@ class UserController extends Controller
     /**
      * Update the specified user in storage.
      */
+
     public function update(Request $request, $id)
-    {
-        $user = User::findOrFail($id);
-        $data = $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'password' => 'nullable',
-            're_password' => 'same:password',
-            'role' => 'required',
-        ]);
-        if ($request->password) {
-            $data['password'] = Hash::make($request->password);
-        } else {
-            $data['password'] = $user->password;
+{
+    $user = User::findOrFail($id);
+    
+    $data = $request->validate([
+        'name' => 'required',
+        'email' => 'required|email|unique:users,email,' . $user->id,
+        'old_password' => 'nullable', // wajib kalau ganti password
+        'password' => 'nullable',
+        're_password' => 'same:password',
+        'role' => 'required',
+    ]);
+
+    // Cek password lama hanya jika user mau ganti password
+    if ($request->filled('password')) {
+        if (!Hash::check($request->old_password, $user->password)) {
+            return back()->withErrors(['old_password' => 'Password lama salah']);
         }
-        unset($data['re_password']);
-        $user->update($data);
-        Alert::success('Sukses', 'User berhasil diperbarui');
-        return redirect('/operator/user')->with('success', 'User berhasil diperbarui.');
+        $data['password'] = Hash::make($request->password);
+    } else {
+        // Kalau tidak ganti, tetap simpan password lama
+        $data['password'] = $user->password;
     }
+
+    unset($data['re_password']);
+    unset($data['old_password']);
+
+    $user->update($data);
+
+    Alert::success('Sukses', 'User berhasil diperbarui');
+    return redirect('/operator/user')->with('success', 'User berhasil diperbarui.');
+}
+
 
     /**
      * Remove the specified user from storage.

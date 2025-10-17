@@ -2,7 +2,7 @@
 <aside class="new-sidebar">
     <div class="sidebar-header d-flex justify-content-between align-items-center">
         <h4 class="mb-0">Tokoku</h4>
-        <span class="role-badge">Operator</span>
+        <span class="role-badge">Admin</span>
     </div>
     <ul class="sidebar-menu">
         <li>
@@ -37,7 +37,7 @@
         </li>
         <hr style="border-color: rgba(255,255,255,0.2); margin: 20px 0;">
         <li>
-            <a href="{{ route('logout') }}" class="text-danger">
+            <a href="/logout" class="text-danger">
                 <i class="fas fa-sign-out-alt me-2"></i> Logout
             </a>
         </li>

@@ -67,12 +67,12 @@
 
                 <div class="form-group">
                     <label for="">Dibayarkan</label>
-                    <input type="text" value="{{ isset($transaksi->dibayarkan) ? $transaksi->dibayarkan : '-' }}" class="form-control" disabled>
+                    <input type="text" value="{{ 'Rp. '.format_rupiah($transaksi->dibayarkan ?? 0) }}" class="form-control" disabled>
                 </div>
 
                 <div class="form-group">
                     <label for="">Uang Kembalian</label>
-                    <input type="text" value="{{ 'Rp. '.format_rupiah(max(0, ($transaksi->dibayarkan ?? 0) - $transaksi->total)) }}" class="form-control" disabled>
+                    <input type="text" value="{{ 'Rp. '.format_rupiah($transaksi->kembalian ?? (($transaksi->dibayarkan ?? 0) - $transaksi->total)) }}" class="form-control" disabled>
                 </div>
 
                 <a href="/kasir/transaksi" class="btn btn-info"><i class="fas fa-arrow-left"></i> Kembali</a>

@@ -1,8 +1,20 @@
-<div class="row p-2">
-    <div class="col-md-6 col-sm-12 mb-3">
-        <div class="card">
+<div style="min-height: 100vh; display: flex; gap: 20px; padding: 20px; flex-wrap: wrap;">
+
+    <!-- Kiri: Tambah Stok -->
+    <div style="flex: 1; min-width: 300px;">
+        <div class="card shadow" style="border-radius: 12px;">
+            <!-- Header -->
+<div style="background: linear-gradient(135deg, #4e73df, #6f42c1); 
+            color: white; 
+            min-height: 60px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            padding: 15px;">
+    <h5 class="mb-0"><b>Tambah Stok Produk</b></h5>
+</div>
+
             <div class="card-body">
-                <h5><b>Tambah Stok Produk</b></h5>
                 <form action="{{ url('/operator/stok') }}" method="POST">
                     @csrf
                     <div class="mb-3">
@@ -18,16 +30,30 @@
                         <label for="qty" class="form-label">Jumlah Stok Masuk</label>
                         <input type="number" name="qty" id="qty" class="form-control" min="1" required>
                     </div>
-                    <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> Tambah Stok</button>
+                    <button type="submit" class="btn" 
+                        style="background-color: white; color: #4e73df; font-weight: bold; border: none;">
+                        <i class="fas fa-plus"></i> Tambah Stok
+                    </button>
                 </form>
             </div>
         </div>
     </div>
-    <div class="col-md-6 col-sm-12">
-        <div class="card">
-            <div class="card-body">
-                <h5><b>Riwayat Stok</b></h5>
-                <table class="table">
+
+    <!-- Kanan: Riwayat Stok -->
+    <div style="flex: 2; min-width: 400px;">
+        <div class="card shadow" style="border-radius: 12px;">
+        <div style="background: linear-gradient(135deg, #4e73df, #6f42c1); 
+            color: white; 
+            min-height: 60px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            padding: 15px;">
+    <h5 class="mb-0"><b>Riwayat Stok</b></h5>
+</div>
+
+            <div class="card-body" style="overflow-x: auto;">
+                <table class="table table-bordered table-hover" style="width: 100%;">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -55,7 +81,7 @@
                         @endforeach
                     </tbody>
                 </table>
-                <div class="d-flex justify-content-center">
+                <div class="d-flex justify-content-center mt-2">
                     {{ $histories->links() }}
                 </div>
             </div>
